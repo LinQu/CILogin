@@ -10,6 +10,10 @@ class Manage_model extends CI_Model
     return $this->db->get($this->_table)->result_array();
   }
 
+
+
+
+
   public function getById($id)
   {
     $this->db->select('*');

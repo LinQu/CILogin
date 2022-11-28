@@ -23,22 +23,26 @@ class Login extends CI_Controller
         $password = $data->password;
         $name = $data->nama;
         $role = $data->role;
+        $totaladmin = $user->getAdmin();
+        $totaldosen = $user->getDosen();
 
         //adding session
         $newdata = array(
           'username' => $username,
           'name' => $name,
           'role' => $role,
-          'logged_in' => TRUE
+          'logged_in' => TRUE,
+          'totaladmin' => $totaladmin,
+          'totaldosen' => $totaldosen
         );
 
         $this->session->set_userdata($newdata);
         if ($role == 'admin') {
           '<script>alert("Login Berhasil ' . $username . '")</script>';
-          redirect('dashboard/Dashboard');
+          redirect('Dashboard');
         } else {
           echo '<script>alert("Login Berhasil ' . $newdata . '")</script>';
-          redirect('dashboard/Dashboard');
+          redirect('Dashboard');
         }
       } else {
         $this->session->set_flashdata('message', 'Username atau Password Salah');
@@ -51,6 +55,7 @@ class Login extends CI_Controller
 
   public function logout()
   {
+    $this->session->unset_userdata('logged_in');
     $this->session->sess_destroy();
     redirect('login/login');
   }

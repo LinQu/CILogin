@@ -6,6 +6,11 @@ class Account extends CI_Controller
   public function __construct()
   {
     parent::__construct();
+    if (!$this->session->userdata('logged_in')) {
+      //set flash
+      $this->session->set_flashdata('message', 'You Must Login First');
+      redirect('Login/login');
+    }
     $this->load->model('Manage_model');
     $this->load->library('form_validation');
   }
@@ -24,6 +29,7 @@ class Account extends CI_Controller
     $data['title'] = 'Add Account';
     $this->form_validation->set_rules('username', 'Username', 'required');
     $this->form_validation->set_rules('password', 'Password', 'required');
+    $this->form_validation->set_rules('passwordval', 'Password Confirmation', 'required');
     $this->form_validation->set_rules('nama', 'Nama', 'required');
     $this->form_validation->set_rules('role', 'Role', 'required');
     $this->form_validation->set_rules('email', 'Email', 'required');

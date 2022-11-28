@@ -15,7 +15,7 @@
 
 <body>
   <div class="content-wrapper">
-    <div>
+    <div class="container ">
       <div class="d-flex justify-content-center align-items-center mt-5">
         <div class="card">
 
@@ -28,13 +28,21 @@
             </li>
 
           </ul>
+          <?php if ($this->session->flashdata('message')) : ?>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+              <?= $this->session->flashdata('message'); ?>.
+              <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+          <?php endif; ?>
           <div class="tab-content" id="pills-tabContent">
             <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
 
               <div class="form px-4 pt-5">
                 <form action="<?php echo site_url('Login/login'); ?>" method="POST" autocomplete="off">
 
-                  <input type="text" name="username" class="form-control" placeholder="Email or Phone">
+                  <input type="text" name="username" class="form-control" placeholder="Username">
 
                   <input type="password" name="password" class="form-control" placeholder="Password">
                   <button type="submit" class="btn btn-dark btn-block">Login</button>

@@ -1,6 +1,5 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
-
 ?>
 
 <!DOCTYPE html>
@@ -80,9 +79,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
           <!-- ============================================================== -->
           <ul class="navbar-nav mr-auto mt-md-0">
             <!-- This is  -->
-            <li class="nav-item">
-              <a class="nav-link nav-toggler hidden-md-up text-muted waves-effect waves-dark" href="javascript:void(0)"><i class="mdi mdi-menu"></i></a>
-            </li>
             <!-- ============================================================== -->
             <!-- Search -->
             <!-- ============================================================== -->
@@ -107,10 +103,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <img src="<?php echo base_url(); ?>assets/images/users/1.jpg" alt="user" class="profile-pic m-r-10" />
                 <?php if ($this->session->userdata('role') == 'Admin') { ?>
                   <?php echo $this->session->userdata('name'); ?> (Admin)
-                <?php } else { ?>
+                <?php } else if ($this->session->userdata('role') == 'Dosen') { ?>
                   <?php echo $this->session->userdata('name'); ?> (Dosen)
+                <?php } ?>
               </a>
-            <?php } ?>
+
             </li>
           </ul>
         </div>
@@ -193,29 +190,60 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   <div class="col-12">
                     <div class="d-flex flex-wrap">
                       <div>
-                        <h3 class="card-title">Sales Overview</h3>
+                        <h3 class="card-title">Total Account</h3>
                         <h6 class="card-subtitle">
-                          Ample Admin Vs Pixel Admin
+                          Total Account Admin & Dosen
                         </h6>
                       </div>
                       <div class="ml-auto">
-                        <ul class="list-inline">
-                          <li>
-                            <h6 class="text-muted text-success">
-                              <i class="fa fa-circle font-10 m-r-10"></i>Ample
-                            </h6>
-                          </li>
-                          <li>
-                            <h6 class="text-muted text-info">
-                              <i class="fa fa-circle font-10 m-r-10"></i>Pixel
-                            </h6>
-                          </li>
-                        </ul>
+
                       </div>
                     </div>
                   </div>
                   <div class="col-12">
-                    <div class="amp-pxl" style="height: 360px"></div>
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <th>No</th>
+                          <th>Description</th>
+                          <th>Total</th>
+                          <th>Percentage</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>1</td>
+                          <td>Admin</td>
+                          <td><?php echo $totaladmin;  ?></td>
+                          <?php
+                          //itung persentase
+                          $total = $totaladmin + $totaldosen;
+                          $persentase = ($totaladmin / $total) * 100;
+                          echo "<td>" . round($persentase, 1) . "%</td>";
+                          ?>
+                        </tr>
+                        <tr>
+                          <td>2</td>
+                          <td>Dosen</td>
+                          <td><?php echo $totaldosen  ?> </td>
+                          <?php
+                          //itung persentase
+                          $persentase = ($totaldosen / $total) * 100;
+                          echo "<td>" . round($persentase, 1) . "%</td>";
+                          ?>
+                        </tr>
+                      </tbody>
+                      <tfoot>
+                        <tr>
+                          <td colspan="2">Total</td>
+                          <td><?php
+                              $total = $totaladmin + $totaldosen;
+                              echo $total;
+                              ?></td>
+                          <td>100%</td>
+                        </tr>
+                      </tfoot>
+                    </table>
                   </div>
                 </div>
               </div>
@@ -224,8 +252,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
           <div class="col-lg-4 col-md-5">
             <div class="card">
               <div class="card-block">
-                <h3 class="card-title">Our Visitors</h3>
-                <h6 class="card-subtitle">Different Devices Used to Visit</h6>
+                <h3 class="card-title">Data Account</h3>
+                <h6 class="card-subtitle">Total Account</h6>
                 <div id="visitor" style="height: 290px; width: 100%"></div>
               </div>
               <div>
@@ -235,17 +263,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <ul class="list-inline m-b-0">
                   <li>
                     <h6 class="text-muted text-info">
-                      <i class="fa fa-circle font-10 m-r-10"></i>Mobile
+                      <i class="fa fa-circle font-10 m-r-10"></i>Admin
                     </h6>
                   </li>
                   <li>
                     <h6 class="text-muted text-primary">
-                      <i class="fa fa-circle font-10 m-r-10"></i>Desktop
-                    </h6>
-                  </li>
-                  <li>
-                    <h6 class="text-muted text-success">
-                      <i class="fa fa-circle font-10 m-r-10"></i>Tablet
+                      <i class="fa fa-circle font-10 m-r-10"></i>Dosen
                     </h6>
                   </li>
                 </ul>
@@ -673,8 +696,47 @@ defined('BASEPATH') or exit('No direct script access allowed');
   <script src="<?php echo base_url(); ?>assets/plugins/d3/d3.min.js"></script>
   <script src="<?php echo base_url(); ?>assets/plugins/c3-master/c3.min.js"></script>
   <!-- Chart JS -->
-  <script src="<?php echo base_url(); ?>assets/js/dashboard1.js"></script>
+  <script src="<?php echo base_url(); ?>assets/js/dashboard.js"></script>
+  <script>
+    $(function() {
+      var chart = c3.generate({
+        bindto: "#visitor",
+        data: {
+          columns: [
+            ["Dosen", <?php echo $totaldosen  ?>],
+            ["Admin", <?php echo $totaladmin  ?>],
+          ],
 
+          type: "donut",
+          onclick: function(d, i) {
+            console.log("onclick", d, i);
+          },
+          onmouseover: function(d, i) {
+            console.log("onmouseover", d, i);
+          },
+          onmouseout: function(d, i) {
+            console.log("onmouseout", d, i);
+          },
+        },
+        donut: {
+          label: {
+            show: false,
+          },
+          title: "Data Account",
+          width: 20,
+        },
+
+        legend: {
+          hide: true,
+          //or hide: 'data1'
+          //or hide: ['data1', 'data2']
+        },
+        color: {
+          pattern: ["#26c6da", "#745af2"],
+        },
+      });
+    });
+  </script>
 </body>
 
 </html>

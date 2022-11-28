@@ -102,8 +102,9 @@
                   <?php echo $this->session->userdata('name'); ?> (Admin)
                 <?php } else { ?>
                   <?php echo $this->session->userdata('name'); ?> (Dosen)
+                <?php } ?>
               </a>
-            <?php } ?>
+
             </li>
           </ul>
         </div>

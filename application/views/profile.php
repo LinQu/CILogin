@@ -52,7 +52,7 @@
 
       <!-- /.card-header -->
       <div class="card-body">
-        <table id="example2" width="100%" class="table table-bordered table-striped">
+        <table id="example2" width="100%" class=" table table-bordered table-striped">
           <thead>
             <tr>
               <th>Username</th>
@@ -93,12 +93,16 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title">Modal title</h5>
+            <h5 class="modal-title">Create Account</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
           </div>
           <div class="modal-body">
             <!-- /.card-header -->
+            <!-- if password not same -->
+            <div class="alert" style="display:none" id="alert" role="alert">
+            </div>
+
             <div class="card-body mx-5 mb-5">
               <form action="<?php echo site_url('Account/add') ?>" role="form" method="post">
                 <div class="box-body">
@@ -114,8 +118,14 @@
 
                   <div class="form-group">
                     <label for="pass">Password</label>
-                    <input type="text" class="form-control" name="password" required>
+                    <input type="text" class="form-control" id="password" onkeyup="validate()" name="password" required>
                   </div>
+                  <div class="form-group">
+
+                    <label for="pass">Password Confirmation</label>
+                    <input type="text" class="form-control passwordval" onkeyup="validate()" id="passwordval" name="passwordval" required>
+                  </div>
+
 
                   <div class="form-group">
                     <label for="role">Role</label>
@@ -138,7 +148,7 @@
                   <div class="modal-footer">
                     <button type="number" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
                     &nbsp;&nbsp;
-                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                    <button type="submit" id="btn-save" disabled class="btn btn-primary">Save Changes</button>
                   </div>
                 </div>
               </form>
@@ -189,6 +199,8 @@
             </div>
             <div class="modal-body">
               <!-- /.card-header -->
+              <div class="alert" style="display:none" id="alert1" role="alert">
+              </div>
               <div class="card-body mx-5 mb-5">
                 <div class="box-body">
                   <div class="form-group">
@@ -201,10 +213,19 @@
                     <input type="text" class="form-control nama" name="nama" required>
                   </div>
 
+
                   <div class="form-group">
                     <label for="pass">Password</label>
-                    <input type="text" class="form-control password" name="password" required>
+                    <input type="text" class="form-control password" onkeyup="validate1()" id="password1" name="password" required>
                   </div>
+                  <!-- if password not same -->
+
+                  <div class="form-group">
+                    <label for="pass">Password Confirmation</label>
+                    <input type="text" class="form-control passwordval" onkeyup="validate1()" id="passwordval1" name="passwordval" required>
+                  </div>
+
+                  <!-- if password not same -->
 
                   <div class="form-group">
                     <label for="role">Role</label>
@@ -227,7 +248,7 @@
                   <div class="modal-footer">
                     <button type="number" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
                     &nbsp;&nbsp;
-                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                    <button type="submit" id="btn-update" disabled class="btn btn-primary">Save Changes</button>
                   </div>
                 </div>
               </div>
@@ -246,3 +267,54 @@
 <!-- /.content -->
 
 <!-- page script -->
+<script>
+  function validate1() {
+    var password = document.getElementById("password1").value;
+    var passwordval = document.getElementById("passwordval1").value;
+    const alert = document.getElementById("alert1");
+    const btnsave = document.getElementById("btn-save");
+    const btnupdate = document.getElementById("btn-update");
+    if (password != passwordval) {
+      alert.classList.add("alert-danger");
+      alert.classList.remove("alert-success");
+      alert.innerHTML = "Password not same";
+      btnsave.setAttribute("disabled", "disabled");
+      btnupdate.setAttribute("disabled", "disabled");
+      alert.style.display = "block";
+    } else {
+      alert.classList.remove("alert-danger");
+      alert.classList.add("alert-success");
+      // alert.style.display = "none";
+      btnsave.removeAttribute("disabled");
+      btnupdate.removeAttribute("disabled");
+      alert.innerHTML = "Password same";
+    }
+    return true;
+  }
+
+  function validate() {
+    var password = document.getElementById("password").value;
+    var passwordval = document.getElementById("passwordval").value;
+    const btnsave = document.getElementById("btn-save");
+    const btnupdate = document.getElementById("btn-update");
+    const alert = document.getElementById("alert");
+    if (password != passwordval) {
+
+      alert.classList.add("alert-danger");
+      alert.classList.remove("alert-success");
+      alert.innerHTML = "Password not same";
+      btnsave.setAttribute("disabled", "disabled");
+      btnupdate.setAttribute("disabled", "disabled");
+      alert.style.display = "block";
+    } else {
+      alert.classList.add("alert-success");
+      alert.classList.remove("alert-danger");
+      //alert.style.display = "none";
+      alert.innerHTML = "";
+      btnsave.removeAttribute("disabled");
+      btnupdate.removeAttribute("disabled");
+      alert.innerHTML = "Password same";
+    }
+    return true;
+  }
+</script>
