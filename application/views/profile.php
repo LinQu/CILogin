@@ -13,7 +13,11 @@
 <!-- Main content -->
 <section class="content">
   <div class="container-fluid">
-    <button data-toggle="modal" data-target="#exampleModal" class="btn btn-primary">Tambah</button><br><br>
+    <!-- if dosen  -->
+    <?php if ($this->session->userdata('role') == 'Admin') { ?>
+      <button data-toggle="modal" data-target="#exampleModal" class="btn btn-primary">Tambah</button><br><br>
+    <?php } ?>
+
 
     <div class="card">
       <div class="card-header">
@@ -61,7 +65,9 @@
               <th>Role</th>
               <th>Email</th>
               <th>Number Phone</th>
-              <th>Action</th>
+              <?php if ($this->session->userdata('role') == 'Admin') { ?>
+                <th>Action</th>
+              <?php } ?>
             </tr>
           </thead>
           <tbody>
@@ -77,10 +83,12 @@
                 <td><?php echo $row['role']; ?></td>
                 <td><?php echo $row['email']; ?></td>
                 <td><?php echo $row['telepon']; ?></td>
-                <td>
-                  <a href="#" data-username="<?= $row['username']; ?>" data-password="<?= $row['password']; ?>" data-nama="<?= $row['nama']; ?>" data-role="<?= $row['role']; ?>" data-email="<?= $row['email']; ?>" data-telepon="<?= $row['telepon']; ?>" class="btn btn-edit btn-warning">Edit</a>
-                  <a href="#" data-username="<?= $row['username']; ?>" class="btn btn-danger btn-delete ">Delete</a>
-                </td>
+                <?php if ($this->session->userdata('role') == 'Admin') { ?>
+                  <td>
+                    <a href="#" data-username="<?= $row['username']; ?>" data-password="<?= $row['password']; ?>" data-nama="<?= $row['nama']; ?>" data-role="<?= $row['role']; ?>" data-email="<?= $row['email']; ?>" data-telepon="<?= $row['telepon']; ?>" class="btn btn-edit btn-warning">Edit</a>
+                    <a href="#" data-username="<?= $row['username']; ?>" class="btn btn-danger btn-delete ">Delete</a>
+                  </td>
+                <?php } ?>
               </tr>
             <?php } ?>
           </tbody>
@@ -104,32 +112,41 @@
             </div>
 
             <div class="card-body mx-5 mb-5">
-              <form action="<?php echo site_url('Account/add') ?>" role="form" method="post">
+              <!-- form myForm -->
+
+              <form action="<?php echo site_url('Account/add') ?>" id="myForm" class="was-validate" role="form" method="post">
                 <div class="box-body">
                   <div class="form-group">
                     <label for="username">Username</label>
-                    <input type="text" class="form-control" name="username" required>
+                    <input type="text" class="form-control" id="username" onfocusout="validateForm();" name="username" required>
                   </div>
 
                   <div class="form-group">
                     <label for="nama">Nama</label>
-                    <input type="text" class="form-control" name="nama" required>
+                    <input type="text" class="form-control" id="nama" onfocusout="validateForm();" name="nama" required>
                   </div>
 
                   <div class="form-group">
                     <label for="pass">Password</label>
-                    <input type="text" class="form-control" id="password" onkeyup="validate()" name="password" required>
+                    <input type="text" class="form-control" id="password" onfocusout="validateForm();" name="password" required>
                   </div>
                   <div class="form-group">
 
                     <label for="pass">Password Confirmation</label>
-                    <input type="text" class="form-control passwordval" onkeyup="validate()" id="passwordval" name="passwordval" required>
+                    <input type="text" class="form-control passwordval" onfocusout="validateForm();" id="passwordval" name="passwordval" required>
                   </div>
+                  <!-- Password must contain at least ONE UPPERCASE LETTER
+                  ONE LOWERCASE LETTER, ONE NUMBER, ONE SPECIAL CHARACTER
+                  AND MUST BE AT LEAST 8 CHARACTERS LONG -->
+                  <!-- display list erorr -->
+                  <div class="alert" style="display:none" id="alert2" role="alert">
+                  </div>
+
 
 
                   <div class="form-group">
                     <label for="role">Role</label>
-                    <select name="role" class="form-control" style="width: 100%;" required>
+                    <select name="role" class="form-control" id="role" onfocusout="validateForm();" style="width: 100%;" required>
                       <option value="null">-- Select One --</option>
                       <option value="Admin">Admin</option>
                       <option value="Dosen">Dosen</option>
@@ -138,12 +155,13 @@
 
                   <div class="form-group">
                     <label for="email">Email</label>
-                    <input type="text" class="form-control" name="email" required>
+                    <input type="email" class="form-control" onfocusout="emailValidation()" id="emails" name="email" required>
+                    <p class="help-block"></p>
                   </div>
 
                   <div class="form-group">
                     <label for="telepon">Telepon</label>
-                    <input type="text" class="form-control" name="telepon" required>
+                    <input type="text" class="form-control" id="telepon" onfocusout="validateForm();" name="telepon" required>
                   </div>
                   <div class="modal-footer">
                     <button type="number" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
@@ -216,13 +234,13 @@
 
                   <div class="form-group">
                     <label for="pass">Password</label>
-                    <input type="text" class="form-control password" onkeyup="validate1()" id="password1" name="password" required>
+                    <input type="text" class="form-control password" id="password1" name="password" required>
                   </div>
                   <!-- if password not same -->
 
                   <div class="form-group">
                     <label for="pass">Password Confirmation</label>
-                    <input type="text" class="form-control passwordval" onkeyup="validate1()" id="passwordval1" name="passwordval" required>
+                    <input type="text" class="form-control passwordval" id="passwordval1" name="passwordval" required>
                   </div>
 
                   <!-- if password not same -->
@@ -268,53 +286,5 @@
 
 <!-- page script -->
 <script>
-  function validate1() {
-    var password = document.getElementById("password1").value;
-    var passwordval = document.getElementById("passwordval1").value;
-    const alert = document.getElementById("alert1");
-    const btnsave = document.getElementById("btn-save");
-    const btnupdate = document.getElementById("btn-update");
-    if (password != passwordval) {
-      alert.classList.add("alert-danger");
-      alert.classList.remove("alert-success");
-      alert.innerHTML = "Password not same";
-      btnsave.setAttribute("disabled", "disabled");
-      btnupdate.setAttribute("disabled", "disabled");
-      alert.style.display = "block";
-    } else {
-      alert.classList.remove("alert-danger");
-      alert.classList.add("alert-success");
-      // alert.style.display = "none";
-      btnsave.removeAttribute("disabled");
-      btnupdate.removeAttribute("disabled");
-      alert.innerHTML = "Password same";
-    }
-    return true;
-  }
 
-  function validate() {
-    var password = document.getElementById("password").value;
-    var passwordval = document.getElementById("passwordval").value;
-    const btnsave = document.getElementById("btn-save");
-    const btnupdate = document.getElementById("btn-update");
-    const alert = document.getElementById("alert");
-    if (password != passwordval) {
-
-      alert.classList.add("alert-danger");
-      alert.classList.remove("alert-success");
-      alert.innerHTML = "Password not same";
-      btnsave.setAttribute("disabled", "disabled");
-      btnupdate.setAttribute("disabled", "disabled");
-      alert.style.display = "block";
-    } else {
-      alert.classList.add("alert-success");
-      alert.classList.remove("alert-danger");
-      //alert.style.display = "none";
-      alert.innerHTML = "";
-      btnsave.removeAttribute("disabled");
-      btnupdate.removeAttribute("disabled");
-      alert.innerHTML = "Password same";
-    }
-    return true;
-  }
 </script>

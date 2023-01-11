@@ -23,9 +23,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'http://localhost:8080/PRG5/M13/CILogin/';
+$config['base_url'] = 'http://localhost:8080/PRG5/M15/CILogin/';
 
-$config['site_url'] = 'http://localhost:8080/PRG5/M13/CILogin/';
+$config['site_url'] = 'http://localhost:8080/PRG5/M15/CILogin/';
 
 /*
 |--------------------------------------------------------------------------

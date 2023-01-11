@@ -97,7 +97,7 @@
             <li class="nav-item dropdown">
               <!-- jika role admin (Admin) -->
               <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <img src="<?php echo base_url(); ?>assets/images/users/1.jpg" alt="user" class="profile-pic m-r-10" />
+                <img src="<?php echo base_url(); ?>assets/images/user.jpg" alt="user" class="profile-pic m-r-10" />
                 <?php if ($this->session->userdata('role') == 'Admin') { ?>
                   <?php echo $this->session->userdata('name'); ?> (Admin)
                 <?php } else { ?>
